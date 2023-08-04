@@ -7,9 +7,9 @@ import {
 } from "@mui/icons-material";
 import React from "react";
 import { useDispatch } from "react-redux";
-import {setMode} from "../redux/states"
+import { setMode } from "../redux/states";
 import FlexBetween from "./FlexBetween";
-const Navbar = () => {
+const Navbar = ({isSidebarOpen, setIsSidebarOpen}) => {
   const dispatch = useDispatch();
   const theme = useTheme();
 
@@ -19,13 +19,16 @@ const Navbar = () => {
         position: "static",
         background: "none",
         boxShadow: "none",
+        // width:""
       }}
     >
-      <Toolbar sx={{ justifyContent: "space-between" }}>
+      <Toolbar sx={{justifyContent: "space-between" }}>
         {/* LEFT SIDE */}
-        <IconButton onClick={() => console.log("open/close")}>
-          <MenuIcon />
-        </IconButton>
+        <FlexBetween>
+          <IconButton onClick={() => setIsSidebarOpen(!isSidebarOpen)}>
+            <MenuIcon />
+          </IconButton>
+        </FlexBetween>
         {/* RIGHT SIDE */}
         <FlexBetween gap={"1.5rem"}>
           <IconButton onClick={() => dispatch(setMode())}>
