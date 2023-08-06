@@ -25,12 +25,12 @@ const protect = asyncHandler(async (req, res, next) => {
 });
 
 const isAdmin = asyncHandler(async (req, res, next) => {
-  let token;
-  token = req.cookies.jwt;
+  let token = req.cookies.jwt;
   if (token) {
     try {
       const decoded = jwt.verify(token, process.env.JWT_SECRET);
       req.user = await User.findById(decoded.userId).select("-password");
+      console.log(`\n\n${req.user.role}\n\n`);
       if (req.user.role == "admin") next();
       else throw new Error("Not authorized, only admin");
     } catch (error) {
@@ -43,14 +43,13 @@ const isAdmin = asyncHandler(async (req, res, next) => {
   }
 });
 const isDev = asyncHandler(async (req, res, next) => {
-  let token;
-  token = req.cookies.jwt;
+  let token = req.cookies.jwt;
   if (token) {
     try {
       const decoded = jwt.verify(token, process.env.JWT_SECRET);
       req.user = await User.findById(decoded.userId).select("-password");
-      if (req.user.role == "intern") next();
-      else throw new Error("Not authorized, only intern");
+      if (req.user.role == "dev") next();
+      else throw new Error("Not authorized, only dev");
     } catch (error) {
       res.status(401);
       throw new Error("Not authorized, token failed");
@@ -60,12 +59,22 @@ const isDev = asyncHandler(async (req, res, next) => {
     throw new Error("Not authorized, no token");
   }
 });
-const isAdminOrDev = (req, res, next) => {
-  if (isAdmin(req, res) || isDev(req, res)) {
-    next(); // Proceed to the next middleware/controller
+const isAdminOrDev = asyncHandler(async (req, res, next) => {
+  let token = req.cookies.jwt;
+  if (token) {
+    try {
+      const decoded = jwt.verify(token, process.env.JWT_SECRET);
+      req.user = await User.findById(decoded.userId).select("-password");
+      if (req.user.role === "dev" || req.user.role === "admin") next();
+      else throw new Error("Not authorized, only dev");
+    } catch (error) {
+      console.log("error:"+error)
+      res.status(401);
+      throw new Error("Not authorized, token failed");
+    }
   } else {
-    // If neither isAdmin nor isDev passes, return unauthorized response
-    res.status(401).json({ message: "Unauthorized" });
+    res.status(401);
+    throw new Error("Not authorized, no token");
   }
-};
+});
 export { protect, isDev, isAdmin, isAdminOrDev };

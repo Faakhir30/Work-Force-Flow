@@ -15,14 +15,12 @@ const projectSchema = mongoose.Schema(
       required: true,
     },
     team: {
-      type: Set,
-      default: function () {
-        return Set([this.lead, this.pm]);
-      },
+      type: Array,
+      default: [],
     },
     status: {
       type: String,
-      enum: ["active", "pending", "Done"],
+      enum: ["active", "pending", "done"],
       default: "pending",
     },
   },

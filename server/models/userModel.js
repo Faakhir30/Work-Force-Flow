@@ -17,18 +17,17 @@ const userSchema = mongoose.Schema(
       required: true,
     },
     projects: {
-      type: Set,
-      default: Set([]),
+      type: Array,
+      default: [],
     },
     role: {
       type: String,
-      required: true,
       enum: ["dev", "intern", "admin"],
       default: "dev",
     },
     tickets: {
-      type: Set,
-      default: Set([]),
+      type: Array,
+      default: [],
     },
     stats: {
       type: {},

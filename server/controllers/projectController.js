@@ -14,13 +14,14 @@ const createProject = asyncHandler(async (req, res) => {
     team,
     status,
   });
-  for (const person_id in team) {
-    const person = await User.findById({ _id: person_id });
-    person?.projects.add(project._id);
+  for (const person_id of team) {
+    const person = await User.findById(person_id);
+    if (person && !(project._id in person.projects))
+      person.projects = [...person.projects, project._id];
     await person.save();
   }
 
-  if (project) res.status(200).json({ message: "Logged out successfully" });
+  if (project) res.status(200).json({ message: "Created successfully" });
   else res.status(400).json({ message: "error creating project!" });
 });
 
@@ -31,10 +32,10 @@ const getProjects = asyncHandler(async (req, res) => {
   // Decode the token and extract the userId
   const decodedToken = jwt.verify(req.cookies.jwt, process.env.JWT_SECRET);
   const cur_user = await User.findById(decodedToken.userId);
-  const projects = [];
+  let projects = [];
   for (const project_id of cur_user.projects) {
     const project = await Project.findById(project_id);
-    if (project) projects.append(project);
+    if (project) projects=[...projects,project];
   }
   if (projects) {
     res.status(200).json(projects); // Send the retrieved projects as the response
@@ -48,12 +49,8 @@ const getProjects = asyncHandler(async (req, res) => {
 // @access  Private
 
 const updateProject = asyncHandler(async (req, res) => {
-  const { title, lead, pm, team, status } = req.body;
+  const { status } = req.body;
   const project = await Project.findById(req.params.id);
-  project.title = title || project.title;
-  project.lead = lead || project.lead;
-  project.pm = pm || project.pm;
-  project.team = team || project.team;
   project.status = status || project.status;
   const updatedProject = await project.save();
   if (updatedProject)
@@ -72,7 +69,7 @@ const deleteProject = asyncHandler(async (req, res) => {
     return;
   }
   // Delete the project and handle the result
-  const deletedProject = await project.remove();
+  const deletedProject = await project.deleteOne();
   if (deletedProject)
     res.status(200).json({ message: "Project deleted successfully" });
   else res.status(500).json({ message: "Error deleting project" });

@@ -1,11 +1,11 @@
 import express from "express";
-import { isAdmin, isAdminOrDev, isDev } from "../middleware/authMiddleware";
+import { isAdmin, isAdminOrDev, isDev } from "../middleware/authMiddleware.js";
 import {
   createProject,
   deleteProject,
   getProjects,
   updateProject,
-} from "../controllers/projectController";
+} from "../controllers/projectController.js";
 
 const router = express.Router();
 
@@ -13,7 +13,7 @@ router.post("/", isAdmin, createProject);
 
 router
   .route("/:id")
-  .put(isDev, updateProject)
+  .put(isAdminOrDev, updateProject)
   .delete(isAdminOrDev, deleteProject);
 router.get("/all", getProjects);
 export default router;
