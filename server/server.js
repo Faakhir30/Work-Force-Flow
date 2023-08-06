@@ -1,14 +1,11 @@
 import express from "express";
 import bodyParser from "body-parser";
 import morgan from "morgan";
-import mongoose from "mongoose";
 import cors from "cors";
 import dontenv from "dotenv";
 import helmet from "helmet";
 import userRoutes from "./routes/userRoutes.js"
-import clientRoutes from "./routes/client.js";
-import generalRoutes from "./routes/gereral.js";
-import managementRoutes from "./routes/management.js";
+import projectsRoutes from "./routes/projectRoutes.js";
 import ticketingRoutes from "./routes/ticketing.js";
 import connectDB from "./config/db.js";
 import cookieParser from "cookie-parser";
@@ -28,10 +25,8 @@ app.use(cookieParser());
 // ROUTES
 
 app.use('/api/users', userRoutes);
-app.use("/client", clientRoutes);
-app.use("/general", generalRoutes);
-app.use("/management", managementRoutes);
-app.use("/ticketing", ticketingRoutes);
+app.use("/api/projects", projectsRoutes);
+app.use("/api/tickets", ticketingRoutes);
 
 const port = process.env.PORT || 9000;
 connectDB()

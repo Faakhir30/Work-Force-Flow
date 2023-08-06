@@ -17,8 +17,8 @@ const userSchema = mongoose.Schema(
       required: true,
     },
     projects: {
-      type: Array,
-      default: [],
+      type: Set,
+      default: Set([]),
     },
     role: {
       type: String,
@@ -27,8 +27,8 @@ const userSchema = mongoose.Schema(
       default: "dev",
     },
     tickets: {
-      type: Array,
-      default: [],
+      type: Set,
+      default: Set([]),
     },
     stats: {
       type: {},

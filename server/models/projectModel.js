@@ -1,5 +1,4 @@
 import mongoose from "mongoose";
-import User from "./userModel";
 
 const projectSchema = mongoose.Schema(
   {
@@ -8,19 +7,25 @@ const projectSchema = mongoose.Schema(
       required: true,
     },
     lead: {
-      type: User,
+      type: String, //User._id
+      required: true,
+    },
+    pm: {
+      type: String,
       required: true,
     },
     team: {
-      type: Array,
-      default: [this.lead],
+      type: Set,
+      default: function () {
+        return Set([this.lead, this.pm]);
+      },
     },
-    status:{
-        type:String,
-        enum:["active","pending","Done"],
-        default:"pending"
-    }
-},
+    status: {
+      type: String,
+      enum: ["active", "pending", "Done"],
+      default: "pending",
+    },
+  },
   {
     timestamps: true,
   }
