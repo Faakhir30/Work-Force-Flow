@@ -6,7 +6,7 @@ import dontenv from "dotenv";
 import helmet from "helmet";
 import userRoutes from "./routes/userRoutes.js"
 import projectsRoutes from "./routes/projectRoutes.js";
-import ticketingRoutes from "./routes/ticketing.js";
+import ticketingRoutes from "./routes/ticketRoutes.js";
 import connectDB from "./config/db.js";
 import cookieParser from "cookie-parser";
 

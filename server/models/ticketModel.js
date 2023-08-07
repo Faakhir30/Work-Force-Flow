@@ -1,11 +1,9 @@
 import mongoose from "mongoose";
-import User from "./userModel";
-import Project from "./projectModel";
 
 const ticketSchema = mongoose.Schema(
   {
     project:{
-        type:Project,
+        type:String,  //Project._id
         required:true
     },
     title: {
@@ -13,16 +11,16 @@ const ticketSchema = mongoose.Schema(
       required: true,
     },
     provider: {
-      type: User,
+      type: String, //User._id
       required: true,
     },
     holder: {
-      type: User,
+      type: String,
       required: true,
     },
     status: {
       type: String,
-      enum: ["active", "pending", "Done"],
+      enum: ["active", "pending", "done","submited"],
       default: "pending",
     },
   },
