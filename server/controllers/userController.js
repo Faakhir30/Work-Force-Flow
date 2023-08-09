@@ -21,7 +21,7 @@ const authUser = asyncHandler(async (req, res) => {
     });
   } else {
     res.status(401);
-    throw new Error('Invalid email or password');
+    res.json({message:'Invalid email or password'});
   }
 });
 
@@ -35,7 +35,7 @@ const registerUser = asyncHandler(async (req, res) => {
 
   if (userExists) {
     res.status(400);
-    throw new Error('User already exists');
+    res.json({message:'User already exists'});
   }
 
   const user = await User.create({
@@ -56,7 +56,7 @@ const registerUser = asyncHandler(async (req, res) => {
     });
   } else {
     res.status(400);
-    throw new Error('Invalid user data');
+    res.json({message:'Invalid user data'});
   }
 });
 
@@ -86,7 +86,7 @@ const getUserProfile = asyncHandler(async (req, res) => {
     });
   } else {
     res.status(404);
-    throw new Error('User not found');
+    res.json({message:'User not found'});
   }
 });
 
@@ -113,7 +113,7 @@ const updateUserProfile = asyncHandler(async (req, res) => {
     });
   } else {
     res.status(404);
-    throw new Error('User not found');
+    res.json({message:'User not found'});
   }
 });
 export {
