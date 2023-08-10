@@ -1,4 +1,5 @@
 import * as React from "react";
+import Cookies from "js-cookie";
 import Avatar from "@mui/material/Avatar";
 import Button from "@mui/material/Button";
 import CssBaseline from "@mui/material/CssBaseline";
@@ -12,31 +13,33 @@ import Grid from "@mui/material/Grid";
 import LockOutlinedIcon from "@mui/icons-material/LockOutlined";
 import Typography from "@mui/material/Typography";
 import login from "../assets/login.gif";
-import { useLoginApiQuery } from "../redux/Apis/userApi";
+import { useLoginApiMutation } from "../redux/Apis/userApi";
 import { setUserId } from "../redux/states";
 import { useNavigate } from "react-router-dom";
-import axios from "axios";
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 export default function SignInSide() {
+  const [errorSubmiting, seterrorSubmiting] = React.useState("");
   const navigate = useNavigate();
-  // const {da}=axios.post('http://localhost:5001/api/users/auth',{email: formdata.get("email"), password: formdata.get("password")})
-  const dispatch=useDispatch()
-  
-  const handleSubmit = (event) => {
+  const dispatch = useDispatch();
+  const [loginApi] = useLoginApiMutation();
+  const { userId } = useSelector((state) => state.global.userId);
+  if (userId) navigate("/dashboard");
+
+  const handleSubmit = async (event) => {
     event.preventDefault();
-    dispatch(setUserId("asjdasjd"));
-    navigate('/dashboard')
     const formdata = new FormData(event.currentTarget);
-    // const { data, isError, error } = useLoginApiQuery({
-    //   email: formdata.get("email"),
-    //   password: formdata.get("password"),
-    // });
-    // if (isError) console.log(error.data.message);
-    // else {
-    //   navigate("/dashboard");
-    // }
+    const { data, error } = await loginApi({
+      email: formdata.get("email"),
+      password: formdata.get("password"),
+    });
+    if (error) seterrorSubmiting("* " + error.data.message);
+    else if (data) {
+      dispatch(setUserId(data.token));
+      Cookies.set("jwt", data.token, { expires: 7 }); // Set the cookie using js-cookie library
+      navigate("/dashboard");
+    }
   };
-  
+
   return (
     <Grid container component="main" sx={{ height: "100vh" }}>
       <CssBaseline />
@@ -81,7 +84,7 @@ export default function SignInSide() {
           </Typography>
           <Box
             component="form"
-            noValidate
+            // noValidate
             onSubmit={handleSubmit}
             sx={{ fontSize: "1rem", mt: 1 }}
           >
@@ -90,6 +93,7 @@ export default function SignInSide() {
               required
               fullWidth
               id="email"
+              type="email"
               label="Email Address"
               name="email"
               autoComplete="email"
@@ -109,6 +113,10 @@ export default function SignInSide() {
               control={<Checkbox value="remember" color="primary" />}
               label="Remember me"
             />
+            <Typography component="p" sx={{ color: "red" }}>
+              {errorSubmiting}
+            </Typography>
+
             <Button
               type="submit"
               fullWidth
@@ -117,12 +125,7 @@ export default function SignInSide() {
             >
               Sign In
             </Button>
-            <Button
-              type="submit"
-              fullWidth
-              variant="primary"
-              sx={{ mt: 3, mb: 2 }}
-            >
+            <Button type="" fullWidth variant="primary" sx={{ mt: 3, mb: 2 }}>
               Take A Demo
             </Button>
             <Grid container sx={{ justifyContent: "center" }}>

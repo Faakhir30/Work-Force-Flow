@@ -1,8 +1,8 @@
 import { createSlice } from "@reduxjs/toolkit";
-
+import Cookie from "js-cookie";
 const initialState = {
   mode: "dark",
-  userId: "",
+  userId: Cookie.get("jwt"),
 };
 export const globalSlice = createSlice({
   name: "global",
@@ -17,5 +17,5 @@ export const globalSlice = createSlice({
   },
 });
 
-export const { setMode,setUserId } = globalSlice.actions;
+export const { setMode, setUserId } = globalSlice.actions;
 export default globalSlice.reducer;

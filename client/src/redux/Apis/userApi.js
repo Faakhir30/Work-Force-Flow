@@ -2,7 +2,7 @@ import { createApi, fetchBaseQuery } from "@reduxjs/toolkit/query/react";
 
 export const userApi = createApi({
   baseQuery: fetchBaseQuery({
-    baseUrl: "http://localhost:5001/api/users/",
+    baseUrl: `${process.env.REACT_APP_BACKEND_URL}/api/users/`,
   }),
   reducerPath: "api",
   tagTypes: ["User"],
@@ -13,9 +13,9 @@ export const userApi = createApi({
         method: "POST",
         body,
       }),
-      providesTags: ["Auth"],
+      providesTags: ["register"],
     }),
-    loginApi: builder.query({
+    loginApi: builder.mutation({
       query: (body) => ({
         url: "auth",
         method: "POST",
@@ -28,9 +28,9 @@ export const userApi = createApi({
         url: "logout",
         method: "POST",
       }),
-      providesTags: ["Auth"],
+      providesTags: ["logout"],
     }),
   }),
 });
 
-export const { useLoginApiQuery,useRegisterApiQuery,useLogoutApiQuery } = userApi;
+export const { useLoginApiMutation,useRegisterApiQuery,useLogoutApiQuery } = userApi;
