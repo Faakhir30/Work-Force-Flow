@@ -8,6 +8,7 @@ import Layout from "./scenes/Layout";
 import Dashboard from "./scenes/dashboard";
 import PrivateRoute from "./PrivateRoute";
 import SignInSide from "./scenes/SignInSide";
+import SignUpSide from "./scenes/SignUpSide";
 
 function App() {
   const mode = useSelector((state) => state.global.mode);
@@ -23,6 +24,7 @@ function App() {
             <CssBaseline />
             <Routes>
               <Route path="/login" element={<SignInSide/>}/>
+              <Route path="/register" element={<SignUpSide/>}/>
               <Route element={<PrivateRoute />}>
                 <Route element={<Layout />}>
                   <Route path="/" element={<Navigate to={"/dashboard"} />}>

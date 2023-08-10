@@ -7,7 +7,7 @@ export const userApi = createApi({
   reducerPath: "api",
   tagTypes: ["User"],
   endpoints: (builder) => ({
-    registerApi: builder.query({
+    registerApi: builder.mutation({
       query: (body) => ({
         url: "/",
         method: "POST",
@@ -23,7 +23,7 @@ export const userApi = createApi({
       }),
       providesTags: ["Auth"],
     }),
-    logoutApi: builder.query({
+    logoutApi: builder.mutation({
       query: () => ({
         url: "logout",
         method: "POST",
@@ -33,4 +33,5 @@ export const userApi = createApi({
   }),
 });
 
-export const { useLoginApiMutation,useRegisterApiQuery,useLogoutApiQuery } = userApi;
+export const { useLoginApiMutation, useLogoutApiMutation, useRegisterApiMutation } =
+  userApi;

@@ -9,28 +9,34 @@ import Checkbox from "@mui/material/Checkbox";
 import Link from "@mui/material/Link";
 import Paper from "@mui/material/Paper";
 import Box from "@mui/material/Box";
+import InfoIcon from "@mui/icons-material/Info";
 import Grid from "@mui/material/Grid";
 import LockOutlinedIcon from "@mui/icons-material/LockOutlined";
 import Typography from "@mui/material/Typography";
 import login from "../assets/login.gif";
-import { useLoginApiMutation } from "../redux/Apis/userApi";
 import { setUserId } from "../redux/states";
 import { useNavigate } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
-export default function SignInSide() {
-  const navigate = useNavigate();
+import { useRegisterApiMutation } from "../redux/Apis/userApi";
+import { IconButton, Tooltip } from "@mui/material";
+export default function SignUpSide() {
   const { userId } = useSelector((state) => state.global.userId);
   if (userId) navigate("/dashboard");
+
   const [errorSubmiting, seterrorSubmiting] = React.useState("");
+  const navigate = useNavigate();
   const dispatch = useDispatch();
-  const [loginApi] = useLoginApiMutation();
+  const [registerApi] = useRegisterApiMutation();
 
   const handleSubmit = async (event) => {
     event.preventDefault();
     const formdata = new FormData(event.currentTarget);
-    const { data, error } = await loginApi({
+    const { data, error } = await registerApi({
+      company: formdata.get("company"),
       email: formdata.get("email"),
       password: formdata.get("password"),
+      role: "admin",
+      name: formdata.get("email").split("@")[0],
     });
     if (error) seterrorSubmiting("* " + error.data.message);
     else if (data) {
@@ -60,7 +66,7 @@ export default function SignInSide() {
       <Grid
         item
         xs={12}
-        sx={{ height: "100vh" }}
+        sx={{ height: "100vh !important" }}
         sm={4}
         md={5}
         component={Paper}
@@ -69,7 +75,7 @@ export default function SignInSide() {
       >
         <Box
           sx={{
-            my: 8,
+            my: "20px",
             mx: 4,
             display: "flex",
             flexDirection: "column",
@@ -80,14 +86,23 @@ export default function SignInSide() {
             <LockOutlinedIcon />
           </Avatar>
           <Typography component="h1" variant="h2">
-            Sign in
+            Sign Up
           </Typography>
           <Box
             component="form"
-            // noValidate
             onSubmit={handleSubmit}
             sx={{ fontSize: "1rem", mt: 1 }}
           >
+            <TextField
+              margin="normal"
+              required
+              fullWidth
+              id="company"
+              label="Company Name"
+              name="company"
+              autoComplete="company"
+              autoFocus
+            />
             <TextField
               margin="normal"
               required
@@ -97,7 +112,6 @@ export default function SignInSide() {
               label="Email Address"
               name="email"
               autoComplete="email"
-              autoFocus
             />
             <TextField
               margin="normal"
@@ -113,6 +127,11 @@ export default function SignInSide() {
               control={<Checkbox value="remember" color="primary" />}
               label="Remember me"
             />
+            <Tooltip title="You will be signed up as admin/Product Manager of this company.You can add company members later">
+              <IconButton>
+                <InfoIcon />
+              </IconButton>
+            </Tooltip>
             <Typography component="p" sx={{ color: "red" }}>
               {errorSubmiting}
             </Typography>
@@ -123,14 +142,14 @@ export default function SignInSide() {
               variant="contained"
               sx={{ mt: 3, mb: 2 }}
             >
-              Sign In
+              Sign Up
             </Button>
             <Button type="" fullWidth variant="primary" sx={{ mt: 3, mb: 2 }}>
               Take A Demo
             </Button>
             <Grid container sx={{ justifyContent: "center" }}>
-              <Link href="/register" variant="body2" sx={{ fontSize: "1rem" }}>
-                {"Don't have an account? Sign Up"}
+              <Link href="/login" variant="body2" sx={{ fontSize: "1rem" }}>
+                {"Already have an account? Sign In"}
               </Link>
             </Grid>
             <Typography

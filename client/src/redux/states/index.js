@@ -2,7 +2,7 @@ import { createSlice } from "@reduxjs/toolkit";
 import Cookie from "js-cookie";
 const initialState = {
   mode: "dark",
-  userId: Cookie.get("jwt"),
+  userId: Cookie.get("jwt") || '',
 };
 export const globalSlice = createSlice({
   name: "global",
