@@ -37,6 +37,7 @@ export default function SignUpSide() {
       password: formdata.get("password"),
       role: "admin",
       name: formdata.get("email").split("@")[0],
+      login:true
     });
     if (error) seterrorSubmiting("* " + error.data.message);
     else if (data) {

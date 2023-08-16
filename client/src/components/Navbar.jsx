@@ -1,4 +1,14 @@
-import { AppBar, Box, Button, IconButton, Menu, MenuItem, Toolbar, Typography, useTheme } from "@mui/material";
+import {
+  AppBar,
+  Box,
+  Button,
+  IconButton,
+  Menu,
+  MenuItem,
+  Toolbar,
+  Typography,
+  useTheme,
+} from "@mui/material";
 import {
   ArrowDropDownOutlined,
   DarkModeOutlined,
@@ -11,7 +21,7 @@ import { useDispatch } from "react-redux";
 import { setMode } from "../redux/states";
 import FlexBetween from "./FlexBetween";
 import { useProfieApiQuery } from "../redux/Apis/userApi";
-import profileImage from "../assets/profile.png"
+import profileImage from "../assets/profile.png";
 const Navbar = ({ isSidebarOpen, setIsSidebarOpen }) => {
   const user = useProfieApiQuery();
   const dispatch = useDispatch();

@@ -34,8 +34,11 @@ export const userApi = createApi({
       providesTags: ["Auth"],
     }),
     profieApi:builder.query({
-      query:()=>({url:"profile", cookies:cookie.get('jwt')}),
+      query:()=>({url:"profile"}),
 
+    }),
+    allusersApi:builder.query({
+      query:()=>({url:"all"})
     }),
     logoutApi: builder.mutation({
       query: () => ({
@@ -47,5 +50,5 @@ export const userApi = createApi({
   }),
 });
 
-export const {useProfieApiQuery, useLoginApiMutation, useLogoutApiMutation, useRegisterApiMutation } =
+export const {useProfieApiQuery, useLoginApiMutation, useLogoutApiMutation, useRegisterApiMutation,useAllusersApiQuery } =
   userApi;

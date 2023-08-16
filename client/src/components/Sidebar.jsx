@@ -14,19 +14,14 @@ import React, { useEffect, useState } from "react";
 import { useLocation, useNavigate } from "react-router-dom";
 import FlexBetween from "./FlexBetween";
 import {
-  AdminPanelSettingsOutlined,
-  CalendarMonthOutlined,
   ChevronLeft,
   ChevronRightOutlined,
-  Groups2Outlined,
+  People,
   HomeOutlined,
   PieChartOutlined,
   PointOfSaleOutlined,
-  PublicOutlined,
-  ReceiptLongOutlined,
-  ShoppingCartOutlined,
-  TodayOutlined,
-  TrendingUpOutlined,
+  LocalActivity,
+  Inventory,
 } from "@mui/icons-material";
 
 const navItems = [
@@ -35,27 +30,23 @@ const navItems = [
     icon: <HomeOutlined />,
   },
   {
-    text: "Client Facing",
+    text: "Project Facing",
     icon: null,
   },
   {
-    text: "Products",
-    icon: <ShoppingCartOutlined />,
+    text: "Projects",
+    icon: <Inventory />,
   },
   {
-    text: "Customers",
-    icon: <Groups2Outlined />,
+    text: "Tickets",
+    icon: <LocalActivity />,
   },
   {
-    text: "Transactions",
-    icon: <ReceiptLongOutlined />,
+    text: "Users",
+    icon: <People />,
   },
   {
-    text: "Geography",
-    icon: <PublicOutlined />,
-  },
-  {
-    text: "Sales",
+    text: "Stats",
     icon: null,
   },
   {
@@ -63,29 +54,21 @@ const navItems = [
     icon: <PointOfSaleOutlined />,
   },
   {
-    text: "Daily",
-    icon: <TodayOutlined />,
-  },
-  {
-    text: "Monthly",
-    icon: <CalendarMonthOutlined />,
-  },
-  {
     text: "Breakdown",
     icon: <PieChartOutlined />,
   },
-  {
-    text: "Management",
-    icon: null,
-  },
-  {
-    text: "Admin",
-    icon: <AdminPanelSettingsOutlined />,
-  },
-  {
-    text: "Performance",
-    icon: <TrendingUpOutlined />,
-  },
+  // {
+  //   text: "Management",
+  //   icon: null,
+  // },
+  // {
+  //   text: "Admin",
+  //   icon: <AdminPanelSettingsOutlined />,
+  // },
+  // {
+  //   text: "Performance",
+  //   icon: <TrendingUpOutlined />,
+  // },
 ];
 
 const Sidebar = ({
