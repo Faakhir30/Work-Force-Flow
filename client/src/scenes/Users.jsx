@@ -69,7 +69,7 @@ const Users = () => {
             company={profile.data.company}
           />
           <Button
-            sx={{ color: theme.palette.primary[200] }}
+            sx={{ color: theme.palette.primary[100] }}
             onClick={() => setOpenModal(true)}
           >
             <PersonAdd />
@@ -112,19 +112,7 @@ const Users = () => {
           rows={(data && data.users) || []}
           columns={columns}
           rowCount={(data && data.total) || 0}
-          rowsPerPageOptions={[20, 50, 100]}
-          pagination
-          page={page}
-          pageSize={pageSize}
-          paginationMode="server"
-          sortingMode="server"
-          onPageChange={(newPage) => setPage(newPage)}
-          onPageSizeChange={(newPageSize) => setPageSize(newPageSize)}
-          onSortModelChange={(newSortModel) => setSort(...newSortModel)}
           components={{ Toolbar: DataGridCustomToolbar }}
-          componentsProps={{
-            toolbar: { searchInput, setSearchInput, setSearch },
-          }}
         />
       </Box>
     </Box>
