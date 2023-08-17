@@ -32,7 +32,7 @@ export default function SignInSide() {
       email: formdata.get("email"),
       password: formdata.get("password"),
     });
-    if (error) seterrorSubmiting("* " + error.data.message);
+    if (error) seterrorSubmiting("* " + error.data.message? error.data.message: "try again");
     else if (data) {
       dispatch(setUserId(data.token));
       Cookies.set("jwt", data.token, { expires: 7 }); // Set the cookie using js-cookie library

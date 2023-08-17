@@ -11,6 +11,7 @@ import SignInSide from "./scenes/SignInSide";
 import SignUpSide from "./scenes/SignUpSide";
 import Projects from "./scenes/Projects";
 import Users from "./scenes/Users";
+import CreateProject from "./scenes/CreateProject";
 
 function App() {
   const mode = useSelector((state) => state.global.mode);
@@ -32,6 +33,7 @@ function App() {
                   <Route path="/" element={<Navigate to={"/dashboard"} />} />
                   <Route path="/dashboard" element={<Dashboard />} />
                   <Route path="/projects" element={<Projects />} />
+                  <Route path="/projects/create" element={<CreateProject />} />
                   <Route path="/users" element={<Users />} />
                 </Route>
               </Route>

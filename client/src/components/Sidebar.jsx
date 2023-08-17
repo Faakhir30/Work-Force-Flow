@@ -77,7 +77,8 @@ const Sidebar = ({
   setIsSidebarOpen,
   isNonMobile,
 }) => {
-  const { pathname } = useLocation();
+  let { pathname } = useLocation();
+  pathname=pathname.split("/")[0]
   const [active, setActive] = useState("");
   const navigate = useNavigate();
   const theme = useTheme();

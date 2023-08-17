@@ -39,7 +39,7 @@ export default function SignUpSide() {
       name: formdata.get("email").split("@")[0],
       login:true
     });
-    if (error) seterrorSubmiting("* " + error.data.message);
+    if (error) seterrorSubmiting("* " + error.data.message? error.data.message: "try again");
     else if (data) {
       dispatch(setUserId(data.token));
       Cookies.set("jwt", data.token, { expires: 7 }); // Set the cookie using js-cookie library

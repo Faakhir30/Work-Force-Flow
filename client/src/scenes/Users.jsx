@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React from "react";
 import { Box, Button, useTheme } from "@mui/material";
 import { DataGrid } from "@mui/x-data-grid";
 import DataGridCustomToolbar from "../components/DataGridCustomToolbar";
@@ -11,19 +11,9 @@ const Users = () => {
   const theme = useTheme();
 
   // values to be sent to the backend
-  const [page, setPage] = useState(0);
-  const [pageSize, setPageSize] = useState(20);
-  const [sort, setSort] = useState({});
-  const [search, setSearch] = useState("");
   const [openModal, setOpenModal] = React.useState(false);
-  const [searchInput, setSearchInput] = useState("");
   const profile = useProfieApiQuery();
-  const { data, isLoading } = useAllusersApiQuery({
-    page,
-    pageSize,
-    sort: JSON.stringify(sort),
-    search,
-  });
+  const { data, isLoading } = useAllusersApiQuery();
   const columns = [
     {
       field: "_id",
@@ -60,7 +50,7 @@ const Users = () => {
 
   return (
     <Box m="1.5rem 2.5rem">
-      <Header title="Employee" subtitle={`Entire list of Emmployees`} />
+      <Header title="Employee" subtitle={`Entire list of Employees`} />
       {profile?.data?.role === "admin" ? (
         <>
           <AddUserModal

@@ -1,5 +1,5 @@
 import express from "express";
-import { isAdmin, isAdminOrDev, isDev } from "../middleware/authMiddleware.js";
+import { isAdmin, isAdminOrDev, isDev, protect } from "../middleware/authMiddleware.js";
 import {
   createProject,
   deleteProject,
@@ -15,5 +15,5 @@ router
   .route("/:id")
   .put(isAdminOrDev, updateProject)
   .delete(isAdminOrDev, deleteProject);
-router.get("/all", getProjects);
+router.get("/all",protect,  getProjects);
 export default router;

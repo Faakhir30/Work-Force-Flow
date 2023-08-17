@@ -1,7 +1,6 @@
 import asyncHandler from "express-async-handler";
 import Project from "../models/projectModel.js";
 import User from "../models/userModel.js";
-import jwt from "jsonwebtoken";
 // @desc    Create project
 // @route   POST /api/projects/
 // @access  Private
@@ -30,8 +29,7 @@ const createProject = asyncHandler(async (req, res) => {
 // @access  Private
 const getProjects = asyncHandler(async (req, res) => {
   // Decode the token and extract the userId
-  const decodedToken = jwt.verify(req.cookies.jwt, process.env.JWT_SECRET);
-  const cur_user = await User.findById(decodedToken.userId);
+  const cur_user = await User.findById(req.user._id);
   let projects = [];
   for (const project_id of cur_user.projects) {
     const project = await Project.findById(project_id);
