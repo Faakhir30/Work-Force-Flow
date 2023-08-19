@@ -9,7 +9,7 @@ import {
 
 const router = express.Router();
 
-router.post("/", isAdmin, createProject);
+router.post("/", protect, createProject);
 
 router
   .route("/:id")

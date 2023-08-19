@@ -5,11 +5,9 @@ import User from "../models/userModel.js";
 // @route   POST /api/projects/
 // @access  Private
 const createProject = asyncHandler(async (req, res) => {
-  const { title, lead, pm, team, status } = req.body;
+  const { title, team, status } = req.body;
   const project = await Project.create({
     title,
-    lead,
-    pm,
     team,
     status,
   });

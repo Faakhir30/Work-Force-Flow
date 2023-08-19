@@ -1,14 +1,10 @@
 import { useTheme } from "@emotion/react";
-import { Remove } from "@mui/icons-material";
 import InfoIcon from "@mui/icons-material/Info";
 import {
   Box,
   Button,
-  Checkbox,
   Container,
   FormControl,
-  FormControlLabel,
-  Grid,
   IconButton,
   InputLabel,
   MenuItem,
@@ -18,26 +14,40 @@ import {
   Typography,
 } from "@mui/material";
 import React, { useState } from "react";
+import { useAllusersApiQuery, useProfieApiQuery } from "../redux/Apis/userApi";
+import { useCreateProjectMutation } from "../redux/Apis/projectApi";
+import { useNavigate } from "react-router-dom";
 
 const CreateProject = () => {
-    const theme=useTheme()
-  const [errorSubmiting, seterrorSubmiting] = useState("");
-  const [selectedValue, setSelectedValue] = useState(""); // State to hold the selected dropdown value
-  const [selectedValues, setSelectedValues] = useState([]); // State to hold selected options
-
-  const handleSubmit = () => {
-    // Your submit logic here
+  const theme = useTheme();
+  const [message, setMessage] = useState("");
+  const [isError, setIsError] = useState(false);
+  const [teamLead, setTeamLead] = useState(""); // State to hold the selected dropdown value
+  const [interns, setInterns] = useState([]); // State to hold selected options
+  const { data } = useAllusersApiQuery();
+  const profile = useProfieApiQuery();
+  const navigate = useNavigate();
+  const [createProject] = useCreateProjectMutation();
+  const handleSubmit = async (event) => {
+    event.preventDefault();
+    const formdata = new FormData(event.currentTarget);
+    const { data, error } = await createProject({
+      title: formdata.get("title"),
+      team: [teamLead, profile.data._id, ...interns],
+    });
+    setIsError(error ? true : false);
+    setMessage(error ? "* " + error.data?.message : data?.message);
+    if (data) {
+      setTimeout(() => {
+        navigate("/projects");
+      }, 1000);
+    }
   };
 
   const handleDropdownChange = (event) => {
     const selectedOption = event.target.value;
-    setSelectedValues(selectedOption);
+    setInterns(selectedOption);
   };
-
-  const handleRemoveOption = (option) => {
-    setSelectedValues(selectedValues.filter((value) => value !== option));
-  };
-
   return (
     <Container>
       <Box
@@ -55,53 +65,49 @@ const CreateProject = () => {
           autoComplete="title"
           autoFocus
         />
-        <FormControl fullWidth sx={{mt:2}}>
-          <InputLabel>Select an option</InputLabel>
+        <FormControl fullWidth sx={{ mt: 2 }}>
+          <InputLabel>Select Team Lead</InputLabel>
           <Select
-            value={selectedValue}
+            value={teamLead}
             label="Select an option"
+            required
             onChange={(e) => {
-              setSelectedValue(e.target.value);
+              setTeamLead(e.target.value);
             }}
           >
-            <MenuItem value="a">Option A</MenuItem>
-            <MenuItem value="b">Option B</MenuItem>
-            <MenuItem value="c">Option C</MenuItem>
+            {data?.users
+              ?.filter((user) => user.role === "dev")
+              .map((user) => (
+                <MenuItem key={user._id} value={user._id}>
+                  {user.name + "  (TL)"}
+                </MenuItem>
+              ))}
           </Select>
         </FormControl>
 
-        <FormControl fullWidth sx={{mt:2}}>
-          <InputLabel>Select options</InputLabel>
+        <FormControl fullWidth sx={{ mt: 2 }}>
+          <InputLabel>Select Interns</InputLabel>
           <Select
             multiple
-            value={selectedValues}
+            required
+            value={interns}
             label="Select options"
             onChange={handleDropdownChange}
           >
-            <MenuItem value="a">Option A</MenuItem>
-            <MenuItem value="b">Option B</MenuItem>
-            <MenuItem value="c">Option C</MenuItem>
+            {data?.users
+              ?.filter((user) => user.role === "intern")
+              .map((user) => (
+                <MenuItem key={user._id} value={user._id}>
+                  {user.name + " (Intern)"}
+                </MenuItem>
+              ))}
           </Select>
-          <Box sx={{ display: "flex", flexWrap: "wrap" }}>
-            {selectedValues.map((value) => (
-              <Button
-                key={value}
-                variant="outlined"
-                sx={{ m: 0.5,
-                    color:theme.palette.secondary[100]
-                }}
-                onClick={() => handleRemoveOption(value)}
-              >
-                {value} <Remove/>
-              </Button>
-            ))}
-          </Box>
         </FormControl>
         <Tooltip title="You will be signed up as Product Manager of this Project.You can perform changes for this project.">
-              <IconButton>
-                <InfoIcon />
-              </IconButton>
-            </Tooltip>
+          <IconButton>
+            <InfoIcon />
+          </IconButton>
+        </Tooltip>
         <Button
           type="submit"
           fullWidth
@@ -110,8 +116,8 @@ const CreateProject = () => {
         >
           Create Project
         </Button>
-        <Typography component="p" sx={{ color: "red" }}>
-          {errorSubmiting}
+        <Typography component="p" sx={{ color: isError ? "red" : "green" }}>
+          {message}
         </Typography>
       </Box>
     </Container>

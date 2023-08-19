@@ -1,5 +1,5 @@
 import { createApi, fetchBaseQuery } from "@reduxjs/toolkit/query/react";
-import cookie from "js-cookie"
+import cookie from "js-cookie";
 export const projectApi = createApi({
   baseQuery: fetchBaseQuery({
     baseUrl: `${process.env.REACT_APP_BACKEND_URL}/api/projects/`,
@@ -12,15 +12,20 @@ export const projectApi = createApi({
       return headers;
     },
   }),
-  reducerPath:"projectApi",
-  tagTypes:["Prjects"],
-  endpoints:(builder) => ({
-    allProjects:builder.query({
-        query:()=>({url:"/all"}),
-    })
-  })
-  
+  reducerPath: "projectApi",
+  tagTypes: ["Prjects"],
+  endpoints: (builder) => ({
+    allProjects: builder.query({
+      query: () => ({ url: "/all" }),
+    }),
+    createProject: builder.mutation({
+      query: (body) => ({
+        url: "/",
+        method: "POST",
+        body
+      }),
+    }),
+  }),
 });
 
-
-export const {useAllProjectsQuery} = projectApi
+export const { useAllProjectsQuery, useCreateProjectMutation } = projectApi;

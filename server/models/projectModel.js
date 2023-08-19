@@ -6,14 +6,6 @@ const projectSchema = mongoose.Schema(
       type: String,
       required: true,
     },
-    lead: {
-      type: String, //User._id
-      required: true,
-    },
-    pm: {
-      type: String,
-      required: true,
-    },
     team: {
       type: Array,
       default: [],
@@ -23,6 +15,9 @@ const projectSchema = mongoose.Schema(
       enum: ["active", "pending", "done"],
       default: "pending",
     },
+    deadline:{
+      type:String
+    }
   },
   {
     timestamps: true,

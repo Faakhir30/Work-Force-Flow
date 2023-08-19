@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect } from "react";
 import { Box, Button, useTheme } from "@mui/material";
 import { DataGrid } from "@mui/x-data-grid";
 import DataGridCustomToolbar from "../components/DataGridCustomToolbar";
@@ -13,7 +13,10 @@ const Users = () => {
   // values to be sent to the backend
   const [openModal, setOpenModal] = React.useState(false);
   const profile = useProfieApiQuery();
-  const { data, isLoading } = useAllusersApiQuery();
+  const { data, isLoading, refetch } = useAllusersApiQuery();
+  useEffect(() => {
+    if(data) refetch()
+  }, [openModal])
   const columns = [
     {
       field: "_id",

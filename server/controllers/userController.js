@@ -55,22 +55,13 @@ const registerUser = asyncHandler(async (req, res) => {
   }
   if (user) {
     const token = generateToken(res, user._id);
-    if (notLogin)
       res.status(201).json({
         _id: user._id,
         name: user.name,
         email: user.email,
         role: user.role,
         company: user.company,
-      });
-    else
-      res.status(201).json({
-        _id: user._id,
-        name: user.name,
-        email: user.email,
-        role: user.role,
-        company: user.company,
-        token,
+        token
       });
   } else {
     res.status(400);
@@ -92,7 +83,8 @@ const logoutUser = (req, res) => {
 // @route   GET /api/users/all
 // @access  Private
 const getAllUsers = asyncHandler(async (req, res) => {
-  const users = await User.find();
+  const {company} = req.user
+  const users = await User.find({company});
 
   if (users) {
     const mapedUsers = users.map((user) => {
