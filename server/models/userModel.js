@@ -33,14 +33,6 @@ const userSchema = mongoose.Schema(
       type: Array,
       default: [],
     },
-    stats: {
-      type: {},
-      default: {
-        projects: [0, 0], //  [total, active]
-        tickets: [0, 0],
-        days: 0,
-      },
-    },
   },
   {
     timestamps: true,

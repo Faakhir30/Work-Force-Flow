@@ -6,6 +6,10 @@ const projectSchema = mongoose.Schema(
       type: String,
       required: true,
     },
+    tickets:{
+      type:Array,
+      default:[]
+    },
     team: {
       type: Array,
       default: [],

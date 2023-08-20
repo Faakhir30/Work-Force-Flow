@@ -12,6 +12,8 @@ import SignUpSide from "./scenes/SignUpSide";
 import Projects from "./scenes/Projects";
 import Users from "./scenes/Users";
 import CreateProject from "./scenes/CreateProject";
+import Tickets from "./scenes/Tickets";
+import CreateTicket from "./scenes/CreateTicket";
 
 function App() {
   const mode = useSelector((state) => state.global.mode);
@@ -33,6 +35,8 @@ function App() {
                   <Route path="/" element={<Navigate to={"/dashboard"} />} />
                   <Route path="/dashboard" element={<Dashboard />} />
                   <Route path="/projects" element={<Projects />} />
+                  <Route path="/tickets" element={<Tickets />} />
+                  <Route path="/tickets/create" element={<CreateTicket />} />
                   <Route path="/projects/create" element={<CreateProject />} />
                   <Route path="/users" element={<Users />} />
                 </Route>

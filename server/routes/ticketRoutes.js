@@ -8,9 +8,9 @@ import {
 } from "../controllers/ticketController.js";
 const router = express.Router();
 
-router.post("/", isDev, createTicket);
+router.post("/", protect, createTicket);
 
-router.route("/:id").put(protect, updateTicket).delete(isDev, deleteTicket);
+router.route("/:id").put(protect, updateTicket).delete(protect, deleteTicket);
 router.get("/all", getTickets);
 
 export default router;

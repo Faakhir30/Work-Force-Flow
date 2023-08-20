@@ -23,6 +23,9 @@ const ticketSchema = mongoose.Schema(
       enum: ["active", "pending", "done","submited"],
       default: "pending",
     },
+    category: {
+      type: String
+    }
   },
   {
     timestamps: true,

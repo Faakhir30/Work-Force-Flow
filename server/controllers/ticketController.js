@@ -2,32 +2,34 @@ import asyncHandler from "express-async-handler";
 import Ticket from "../models/ticketModel.js";
 import User from "../models/userModel.js";
 import jwt from "jsonwebtoken";
+import Project from "../models/projectModel.js";
 // @desc    Create ticket
 // @route   POST /api/tickets/
 // @access  Private
 const createTicket = asyncHandler(async (req, res) => {
-  const { project, title, provider, holder, status } = req.body;
+  const { project, title, category, holder, status } = req.body;
+  const provider = req.user._id;
   if (await Ticket.findOne({ project, title, provider, holder }))
     return res.status(400).json({ message: "Similar ticket already exists" });
   const ticket = await Ticket.create({
     project,
     title,
-    provider,
+    provider: req.user._id,
+    category,
     holder,
     status,
   });
   if (ticket) {
     const dev = await User.findById(provider);
-    if (dev) {
-      dev.tickets = [...dev.tickets, ticket];
-      await dev.save();
-    }
+    dev.tickets.push(ticket);
+    await dev.save();
     const intern = await User.findById(holder);
-    if (intern) {
-      intern.tickets = [...intern.tickets, ticket];
-      await dev.save();
-      res.status(200).json({ message: "Created Sucessfully" });
-    }
+    intern.tickets.push(ticket);
+    await intern.save();
+    const theProject = await Project.findById(project); // Fetch the project
+    theProject.tickets.push(ticket); // Add ticket to the tickets array
+    await theProject.save();
+    res.status(200).json({ message: "Created Sucessfully" });
   } else res.status(400).json({ message: "Error saving ticket" });
 });
 
