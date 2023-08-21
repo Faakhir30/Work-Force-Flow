@@ -37,13 +37,11 @@ const createTicket = asyncHandler(async (req, res) => {
 // @route   GET /api/tickets/all
 // @access  Private
 const getTickets = asyncHandler(async (req, res) => {
-  // Decode the token and extract the userId
-  const decodedToken = jwt.verify(req.cookies.jwt, process.env.JWT_SECRET);
-  const cur_user = await User.findById(decodedToken.userId);
+  const cur_user = req.user;
   let tickets = [];
   for (const ticket_id of cur_user.tickets) {
     const ticket = await Ticket.findById(ticket_id);
-    if (ticket) tickets = [...tickets, ticket];
+    if (ticket) tickets.push(ticket);
   }
   if (tickets) {
     res.status(200).json(tickets); // Send the retrieved projects as the response
@@ -60,6 +58,7 @@ const updateTicket = asyncHandler(async (req, res) => {
   const ticket = await Ticket.findById(req.params.id);
   ticket.status = status || ticket.status;
   const updatedTicket = await ticket.save();
+  console.log(updatedTicket.status, status,req.body, "\n\n")
   if (updatedTicket) res.status(200).json({ message: "Updated successfully!" });
   else res.status(400).json({ message: "error updating Ticket!" });
 });

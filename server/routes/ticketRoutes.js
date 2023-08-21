@@ -11,6 +11,6 @@ const router = express.Router();
 router.post("/", protect, createTicket);
 
 router.route("/:id").put(protect, updateTicket).delete(protect, deleteTicket);
-router.get("/all", getTickets);
+router.get("/all",protect, getTickets);
 
 export default router;

@@ -20,11 +20,10 @@ import { useDispatch, useSelector } from "react-redux";
 import { useRegisterApiMutation } from "../redux/Apis/userApi";
 import { IconButton, Tooltip } from "@mui/material";
 export default function SignUpSide() {
+  const navigate = useNavigate();
   const { userId } = useSelector((state) => state.global.userId);
   if (userId) navigate("/dashboard");
-
   const [errorSubmiting, seterrorSubmiting] = React.useState("");
-  const navigate = useNavigate();
   const dispatch = useDispatch();
   const [registerApi] = useRegisterApiMutation();
   const [photo, setPhoto] = React.useState(null);
@@ -47,7 +46,7 @@ export default function SignUpSide() {
 
   return (
     <Grid container component="main" sx={{ height: "100vh", overflow:"hidden" }}>
-      {/* <CssBaseline /> */}
+      <CssBaseline />
       <Grid
         item
         xs={false}

@@ -11,8 +11,6 @@ import {
   useTheme,
 } from "@mui/material";
 import { useRegisterApiMutation } from "../redux/Apis/userApi";
-import { useNavigate } from "react-router-dom";
-import { Photo } from "@mui/icons-material";
 
 export default function AddUserModal({ open, setOpen, company }) {
   const theme = useTheme();
@@ -26,7 +24,6 @@ export default function AddUserModal({ open, setOpen, company }) {
   const [errorSubmiting, seterrorSubmiting] = React.useState("");
   const [successMsg, setsuccessMsg] = React.useState("");
   const [registerApi] = useRegisterApiMutation();
-  const navigate = useNavigate();
   const handleSubmit = async (event) => {
     event.preventDefault();
     const formdata = new FormData(event.currentTarget);

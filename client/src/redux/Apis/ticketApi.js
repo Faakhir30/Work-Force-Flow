@@ -22,7 +22,19 @@ export const ticketApi = createApi({
         body,
       }),
     }),
+    allTickets: builder.mutation({
+      query: () => ({
+        url: "/all",
+      }),
+    }),
+    updateTicket: builder.mutation({
+      query:({tid,status}) =>({
+        url:`/${tid}`,
+        method:"PUT",
+        body:{status}
+      })
+    })
   }),
 });
 
-export const { useCreateTicketMutation } = ticketApi;
+export const { useCreateTicketMutation, useAllTicketsMutation, useUpdateTicketMutation } = ticketApi;
