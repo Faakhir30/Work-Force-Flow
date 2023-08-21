@@ -1,6 +1,26 @@
-.App{
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    
+.App {
+  display: flex;
+  justify-content: center;
+  align-items: center;
 }
+/* Hide the scrollbar buttons */
+::-webkit-scrollbar-button {
+    display: none;
+  }
+  
+  /* Track style */
+  ::-webkit-scrollbar-track {
+    background-color: #7a7f9d; /* You can customize this */
+    border-radius: 8px; /* You can customize this */
+  }
+  
+  /* Thumb style (the draggable scrollbar) */
+  ::-webkit-scrollbar-thumb {
+    background-color: #191F45; /* You can customize this */
+    border-radius: 8px; /* You can customize this */
+  }
+  
+  /* Reduce the width of the scrollbar */
+  ::-webkit-scrollbar {
+    width: 8px; /* You can customize this */
+  }  

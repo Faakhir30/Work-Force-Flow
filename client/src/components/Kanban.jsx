@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { Box, Tooltip, Typography, useTheme } from "@mui/material";
 import { DragDropContext, Draggable, Droppable } from "react-beautiful-dnd"; // Import the necessary components for drag-and-drop
-import { Info } from "@mui/icons-material";
+import { Circle, Info } from "@mui/icons-material";
 import FlexBetween from "../components/FlexBetween";
 import {
   useAllTicketsMutation,
@@ -20,7 +20,7 @@ function Kanban({ role }) {
   const [updateTicket] = useUpdateTicketMutation();
   useEffect(() => {
     const getTickets = async () => {
-      const { data: tickets } = await allTickets();
+      let { data: tickets } = await allTickets();
       setColumns({
         ["pending"]: {
           name: "Requested",
@@ -67,11 +67,10 @@ function Kanban({ role }) {
           items: destItems,
         },
       });
-      const a=await updateTicket({
+      await updateTicket({
         tid: columns[source.droppableId].items[source.index]._id,
         status: destination.droppableId,
       });
-      console.log(a.data.message)
     } else {
       const column = columns[source.droppableId];
       const copiedItems = [...column.items];
@@ -116,6 +115,7 @@ function Kanban({ role }) {
                             : theme.palette.background.alt,
                           width: "100%",
                           height: "65vh",
+                          overflow:"auto",
                           borderRadius: 15,
                           padding: 10,
                         }}
@@ -145,7 +145,7 @@ function Kanban({ role }) {
                             >
                               {(provided, snapshot) => {
                                 return (
-                                  <div
+                                  <Box
                                     ref={provided.innerRef}
                                     {...provided.draggableProps}
                                     {...provided.dragHandleProps}
@@ -162,8 +162,28 @@ function Kanban({ role }) {
                                       ...provided.draggableProps.style,
                                     }}
                                   >
-                                    {item.title}
-                                  </div>
+                                    <FlexBetween>
+                                      <Typography variant="p">
+                                        {item.title}
+                                      </Typography>
+                                      <Tooltip title={item.status}>
+                                        <Circle
+                                          sx={{
+                                            color:
+                                              item.status === "pending"
+                                                ? "#ddcc02"
+                                                : item.status === "active"
+                                                ? "lightslategrey"
+                                                : item.status === "submited"
+                                                ? "lightgreen"
+                                                : theme.palette.background
+                                                    .default,
+                                          }}
+                                        />
+                                      </Tooltip>
+                                    </FlexBetween>
+                                    <Typography variant="overline">{item.updatedAt.slice(0,10)}</Typography>
+                                    </Box>
                                 );
                               }}
                             </Draggable>

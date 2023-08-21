@@ -58,7 +58,6 @@ const updateTicket = asyncHandler(async (req, res) => {
   const ticket = await Ticket.findById(req.params.id);
   ticket.status = status || ticket.status;
   const updatedTicket = await ticket.save();
-  console.log(updatedTicket.status, status,req.body, "\n\n")
   if (updatedTicket) res.status(200).json({ message: "Updated successfully!" });
   else res.status(400).json({ message: "error updating Ticket!" });
 });

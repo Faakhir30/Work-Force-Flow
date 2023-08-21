@@ -41,7 +41,6 @@ const CreateTicket = () => {
     setIsError(error ? true : false);
     setMessage(error ? "* " + error.data?.message : data?.message);
     if (data) {
-        console.log(data)
       setTimeout(() => {
         navigate("/tickets");
       }, 1000);
