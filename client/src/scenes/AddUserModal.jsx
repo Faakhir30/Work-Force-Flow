@@ -12,6 +12,7 @@ import {
 } from "@mui/material";
 import { useRegisterApiMutation } from "../redux/Apis/userApi";
 import { useNavigate } from "react-router-dom";
+import { Photo } from "@mui/icons-material";
 
 export default function AddUserModal({ open, setOpen, company }) {
   const theme = useTheme();
@@ -21,27 +22,24 @@ export default function AddUserModal({ open, setOpen, company }) {
     setOpen(false);
   };
   const [role, setRole] = React.useState("intern");
+  const [photo, setPhoto] = React.useState(null);
   const [errorSubmiting, seterrorSubmiting] = React.useState("");
   const [successMsg, setsuccessMsg] = React.useState("");
   const [registerApi] = useRegisterApiMutation();
-  const navigate = useNavigate()
+  const navigate = useNavigate();
   const handleSubmit = async (event) => {
     event.preventDefault();
     const formdata = new FormData(event.currentTarget);
-    const { data, error } = await registerApi({
-      company: company,
-      email: formdata.get("email"),
-      password: formdata.get("password"),
-      role: role,
-      name: formdata.get("email").split("@")[0],
-      Login: false,
-    });
-    if (error) seterrorSubmiting("* " + error.data.message);
+    formdata.append("company", company)
+    formdata.append("name", formdata.get("email").split("@")[0])
+    formdata.append("role", role)
+    formdata.append("Login", false)
+    const { data, error } = await registerApi(formdata);
+    if (error) seterrorSubmiting("* " + error?.data?.message);
     else if (data) {
       seterrorSubmiting("");
-      setsuccessMsg(data.message);
-      setOpen(false)
-      
+      setsuccessMsg(data?.message);
+      setOpen(false);
     }
   };
   return (
@@ -97,6 +95,18 @@ export default function AddUserModal({ open, setOpen, company }) {
           id="password"
           autoComplete="current-password"
         />
+        <TextField
+          type="file"
+          variant="outlined"
+          label="Upload Photo"
+          id="photo"
+          name="photo"
+          onChange={(event) => setPhoto(event.target.files[0])}
+          InputLabelProps={{
+            shrink: true,
+          }}
+          fullWidth
+        />
         <Box>
           <Typography variant="h6">Select Role</Typography>
           <RadioGroup
@@ -127,7 +137,6 @@ export default function AddUserModal({ open, setOpen, company }) {
         <Typography component="p" sx={{ color: "green" }}>
           {successMsg}
         </Typography>
-
         <Button
           type="submit"
           fullWidth

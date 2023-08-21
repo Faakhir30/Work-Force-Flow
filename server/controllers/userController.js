@@ -1,7 +1,7 @@
 import asyncHandler from "express-async-handler";
 import User from "../models/userModel.js";
 import generateToken from "../utils/generateToken.js";
-
+import fs from "fs";
 // @desc    Auth user & get token
 // @route   POST /api/users/auth
 // @access  Public
@@ -30,39 +30,47 @@ const authUser = asyncHandler(async (req, res) => {
 // @route   POST /api/users
 // @access  Public
 const registerUser = asyncHandler(async (req, res) => {
-  const { company, name, email, password, role, Login } = req.body;
-  const companyExists = await User.findOne({ company });
-  if (!!Login && companyExists) {
-    return res
-      .status(400)
-      .json({ message: "Company already exists.Contact Admin" });
+  const { company, name, email, password, role, Login } = req.fields;
+  const { photo } = req.files;
+  if (Login === "true") {
+    const companyExists = await User.findOne({ company });
+    if (companyExists)
+      return res
+        .status(400)
+        .json({ message: "Company already exists.Contact Admin" });
   }
   const userExists = await User.findOne({ email });
   if (userExists) {
     res.status(400);
-    return res.json({ message: "User already exists" });
+    return res.json({ message: "Email already exists" });
   }
 
   const user = await User.create({
     name,
     email,
     password,
-    role,
+    role: role || "admin",
     company,
   });
-  if (!Login){
-    return res.status(200).json({message: "Added User Sucessfully"})
+  if (photo) {
+    user.photo.data = fs.readFileSync(photo.path);
+    user.photo.contentType = photo.type;
+    await user.save();
+  }
+
+  if (!Login) {
+    return res.status(200).json({ message: "Added User Sucessfully" });
   }
   if (user) {
     const token = generateToken(res, user._id);
-      res.status(201).json({
-        _id: user._id,
-        name: user.name,
-        email: user.email,
-        role: user.role,
-        company: user.company,
-        token
-      });
+    res.status(201).json({
+      _id: user._id,
+      name: user.name,
+      email: user.email,
+      role: user.role,
+      company: user.company,
+      token,
+    });
   } else {
     res.status(400);
     res.json({ message: "Invalid user data" });
@@ -83,8 +91,8 @@ const logoutUser = (req, res) => {
 // @route   GET /api/users/all
 // @access  Private
 const getAllUsers = asyncHandler(async (req, res) => {
-  const {company} = req.user
-  const users = await User.find({company});
+  const { company } = req.user;
+  const users = await User.find({ company });
 
   if (users) {
     const mapedUsers = users.map((user) => {
@@ -94,7 +102,7 @@ const getAllUsers = asyncHandler(async (req, res) => {
         email: user.email,
         role: user.role,
         createdAt: user.createdAt,
-        projects:user.projects
+        projects: user.projects,
       };
     });
     res.json({ users: mapedUsers });
@@ -115,7 +123,7 @@ const getUserProfile = asyncHandler(async (req, res) => {
       name: user.name,
       email: user.email,
       role: user.role,
-      company:user.company
+      company: user.company,
     });
   } else {
     res.status(404);
@@ -149,11 +157,33 @@ const updateUserProfile = asyncHandler(async (req, res) => {
     res.json({ message: "User not found" });
   }
 });
+
+// @desc    Get user photo
+// @route   Get /api/users/photo/:uid
+// @access  Private
+const getPhotoController = async (req, res) => {
+  if(req.params.uid=="undefined") req.params.uid =  req.user._id
+  try {
+    const user = await User.findById(req.params.uid).select("photo");
+    if (user.photo.data) {
+      res.set("Content-type", user.photo.contentType);
+      return res.status(200).send(user.photo.data);
+    }
+  } catch (error) {
+    console.log(error);
+    res.status(500).send({
+      message: "Erorr while getting photo",
+      error,
+    });
+  }
+};
+
 export {
   authUser,
   registerUser,
   logoutUser,
   getUserProfile,
   updateUserProfile,
-  getAllUsers
+  getAllUsers,
+  getPhotoController,
 };

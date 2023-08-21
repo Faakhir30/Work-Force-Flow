@@ -1,17 +1,28 @@
 import React, { useState } from "react";
 import Header from "../components/Header";
 import { useProfieApiQuery } from "../redux/Apis/userApi";
-import { Box, Button, useTheme } from "@mui/material";
+import {
+  Box,
+  Button,
+  Container,
+  Tooltip,
+  Typography,
+  useTheme,
+} from "@mui/material";
 import { DragDropContext, Draggable, Droppable } from "react-beautiful-dnd"; // Import the necessary components for drag-and-drop
-import { Add } from "@mui/icons-material";
+import { Add, Info } from "@mui/icons-material";
 import { useNavigate } from "react-router-dom";
-
+import FlexBetween from "../components/FlexBetween";
 const Tickets = () => {
-    const theme = useTheme()
-    const navigate=  useNavigate()
+  const theme = useTheme();
+  const navigate = useNavigate();
   const profile = useProfieApiQuery();
+  
   return (
-    <Box m="1.5rem 2.5rem">
+    <Box m={{
+      xs: "0 1rem",      // No margin for extra-small screens (mobile)
+      sm: "0 2.5rem" // Apply margin for small screens and above
+    }}>
       <Header
         title={"Tickets"}
         subtitle={`See tickets issued ${
@@ -97,24 +108,24 @@ const onDragEnd = (result, columns, setColumns) => {
 };
 
 function Kanban() {
+  const theme = useTheme();
   const [columns, setColumns] = useState(columnsFromBackend);
   return (
-    <div style={{ display: "flex", justifyContent: "center", height: "100%" }}>
+    <Box sx={{ display: "flex", justifyContent: "space-between" }}>
       <DragDropContext
         onDragEnd={(result) => onDragEnd(result, columns, setColumns)}
       >
         {Object.entries(columns).map(([columnId, column], index) => {
           return (
-            <div
-              style={{
+            <Box
+              sx={{
                 display: "flex",
                 flexDirection: "column",
                 alignItems: "center",
               }}
+              width={{xs:"30vw", sm:"20vw"}}
               key={columnId}
             >
-              <h2>{column.name}</h2>
-              <div style={{ margin: 8 }}>
                 <Droppable droppableId={columnId} key={columnId}>
                   {(provided, snapshot) => {
                     return (
@@ -123,13 +134,30 @@ function Kanban() {
                         ref={provided.innerRef}
                         style={{
                           background: snapshot.isDraggingOver
-                            ? "lightblue"
-                            : "lightgrey",
-                          padding: 4,
-                          width: 250,
-                          minHeight: 500,
+                            ? theme.palette.primary[800]
+                            : theme.palette.background.alt,
+                          width:"100%",
+                          height: "65vh",
+                          borderRadius: 15,
+                          padding: 10,
                         }}
                       >
+                        <FlexBetween mb="10px">
+                          <Typography
+                            sx={{
+                              textAlign: "center",
+                              display: "flex",
+                              alignItems: "center",
+                              color: theme.palette.primary[100],
+                            }}
+                            variant="h5"
+                          >
+                            {column.name}
+                          </Typography>
+                          <Tooltip title="sundlijfldsijld">
+                            <Info />
+                          </Tooltip>
+                        </FlexBetween>
                         {column.items.map((item, index) => {
                           return (
                             <Draggable
@@ -145,12 +173,13 @@ function Kanban() {
                                     {...provided.dragHandleProps}
                                     style={{
                                       userSelect: "none",
-                                      padding: 16,
+                                      padding: 8,
                                       margin: "0 0 8px 0",
-                                      minHeight: "50px",
+                                      minHeight: "40px",
+                                      borderRadius:8,
                                       backgroundColor: snapshot.isDragging
-                                        ? "#263B4A"
-                                        : "#456C86",
+                                        ? theme.palette.primary[700]
+                                        : theme.palette.primary[600],
                                       color: "white",
                                       ...provided.draggableProps.style,
                                     }}
@@ -167,12 +196,11 @@ function Kanban() {
                     );
                   }}
                 </Droppable>
-              </div>
-            </div>
+            </Box>
           );
         })}
       </DragDropContext>
-    </div>
+    </Box>
   );
 }
 export default Tickets;

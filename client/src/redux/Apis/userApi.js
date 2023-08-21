@@ -1,5 +1,5 @@
 import { createApi, fetchBaseQuery } from "@reduxjs/toolkit/query/react";
-import cookie from "js-cookie"
+import cookie from "js-cookie";
 export const userApi = createApi({
   baseQuery: fetchBaseQuery({
     baseUrl: `${process.env.REACT_APP_BACKEND_URL}/api/users/`,
@@ -33,12 +33,16 @@ export const userApi = createApi({
       }),
       providesTags: ["Auth"],
     }),
-    profieApi:builder.query({
-      query:()=>({url:"profile"}),
-
+    photoApi: builder.mutation({
+      query: (uid) => ({
+        url: `photo/${uid}`,
+      }),
     }),
-    allusersApi:builder.query({
-      query:()=>({url:"all"})
+    profieApi: builder.query({
+      query: () => ({ url: "profile" }),
+    }),
+    allusersApi: builder.query({
+      query: () => ({ url: "all" }),
     }),
     logoutApi: builder.mutation({
       query: () => ({
@@ -50,5 +54,11 @@ export const userApi = createApi({
   }),
 });
 
-export const {useProfieApiQuery, useLoginApiMutation, useLogoutApiMutation, useRegisterApiMutation,useAllusersApiQuery } =
-  userApi;
+export const {
+  useProfieApiQuery,
+  useLoginApiMutation,
+  useLogoutApiMutation,
+  useRegisterApiMutation,
+  useAllusersApiQuery,
+  usePhotoApiMutation
+} = userApi;

@@ -27,19 +27,17 @@ export default function SignUpSide() {
   const navigate = useNavigate();
   const dispatch = useDispatch();
   const [registerApi] = useRegisterApiMutation();
-
+  const [photo, setPhoto] = React.useState(null);
   const handleSubmit = async (event) => {
     event.preventDefault();
     const formdata = new FormData(event.currentTarget);
-    const { data, error } = await registerApi({
-      company: formdata.get("company"),
-      email: formdata.get("email"),
-      password: formdata.get("password"),
-      role: "admin",
-      name: formdata.get("email").split("@")[0],
-      Login:true
-    });
-    if (error) seterrorSubmiting("* " + error.data.message? error.data.message: "try again");
+    formdata.append("name", formdata.get("email").split("@")[0]);
+    formdata.append("Login", "true");
+    const { data, error } = await registerApi(formdata);
+    if (error)
+      seterrorSubmiting(
+        "* " + error.data.message ? error.data.message : "try again"
+      );
     else if (data) {
       dispatch(setUserId(data.token));
       Cookies.set("jwt", data.token, { expires: 7 }); // Set the cookie using js-cookie library
@@ -48,8 +46,8 @@ export default function SignUpSide() {
   };
 
   return (
-    <Grid container component="main" sx={{ height: "100vh" }}>
-      <CssBaseline />
+    <Grid container component="main" sx={{ height: "100vh", overflow:"hidden" }}>
+      {/* <CssBaseline /> */}
       <Grid
         item
         xs={false}
@@ -124,6 +122,19 @@ export default function SignUpSide() {
               id="password"
               autoComplete="current-password"
             />
+            <TextField
+              type="file"
+              variant="outlined"
+              label="Upload Photo"
+              id="photo"
+              name="photo"
+              onChange={(event) => setPhoto(event.target.files[0])}
+              InputLabelProps={{
+                shrink: true,
+              }}
+              fullWidth
+            />
+
             <FormControlLabel
               control={<Checkbox value="remember" color="primary" />}
               label="Remember me"
@@ -153,17 +164,6 @@ export default function SignUpSide() {
                 {"Already have an account? Sign In"}
               </Link>
             </Grid>
-            <Typography
-              variant="body2"
-              color="text.secondary"
-              align="center"
-              mt={5}
-            >
-              {"Copyright © WorkForceFlow "}
-
-              {new Date().getFullYear()}
-              {"."}
-            </Typography>
           </Box>
         </Box>
       </Grid>

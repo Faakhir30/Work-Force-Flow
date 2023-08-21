@@ -22,20 +22,20 @@ import { setMode } from "../redux/states";
 import FlexBetween from "./FlexBetween";
 import { useProfieApiQuery } from "../redux/Apis/userApi";
 import profileImage from "../assets/profile.png";
-import cookie from "js-cookie"
+import cookie from "js-cookie";
 import { useNavigate } from "react-router-dom";
 const Navbar = ({ isSidebarOpen, setIsSidebarOpen }) => {
   const user = useProfieApiQuery();
   const dispatch = useDispatch();
-  const navigate = useNavigate()
+  const navigate = useNavigate();
   const theme = useTheme();
   const [anchorEl, setAnchorEl] = useState(null);
   const isOpen = Boolean(anchorEl);
   const handleClick = (event) => setAnchorEl(event.currentTarget);
   const handleClose = () => {
-    cookie.remove("jwt")
-    setAnchorEl(null)
-    navigate('/login')
+    cookie.remove("jwt");
+    setAnchorEl(null);
+    navigate("/login");
   };
 
   return (
@@ -108,7 +108,7 @@ const Navbar = ({ isSidebarOpen, setIsSidebarOpen }) => {
             <Menu
               anchorEl={anchorEl}
               open={isOpen}
-              onClose={()=>setAnchorEl(null)}
+              onClose={() => setAnchorEl(null)}
               anchorOrigin={{ vertical: "bottom", horizontal: "center" }}
             >
               <MenuItem onClick={handleClose}>Log Out</MenuItem>
