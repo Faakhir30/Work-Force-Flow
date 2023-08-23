@@ -1,10 +1,9 @@
 import React from 'react'
+import OverviewChart from '../components/OverviewChart'
 
 const Dashboard = () => {
   return (
-    <div>
-      Dashboard
-    </div>
+      <OverviewChart/>
   )
 }
 

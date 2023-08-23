@@ -21,6 +21,7 @@ function Kanban({ role }) {
   useEffect(() => {
     const getTickets = async () => {
       let { data: tickets } = await allTickets();
+      tickets = [...tickets].reverse()
       setColumns({
         ["pending"]: {
           name: "Requested",
@@ -176,8 +177,7 @@ function Kanban({ role }) {
                                                 ? "lightslategrey"
                                                 : item.status === "submited"
                                                 ? "lightgreen"
-                                                : theme.palette.background
-                                                    .default,
+                                                : theme.palette.primary[500],
                                           }}
                                         />
                                       </Tooltip>

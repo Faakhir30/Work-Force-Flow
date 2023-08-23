@@ -10,8 +10,11 @@ import {
   Typography,
 } from "@mui/material";
 import { Circle, Launch } from "@mui/icons-material";
+import { useNavigate } from "react-router-dom";
+
 const Project = ({ project }) => {
   const theme = useTheme();
+  const navigate = useNavigate()
   const { data } = useAllusersApiQuery();
   const getNamefromUserId = (id) => {
     if (!data) return "";
@@ -63,7 +66,7 @@ const Project = ({ project }) => {
         </Typography>
         <FlexBetween>
           <Typography>{project.createdAt.slice(0, 10)}</Typography>
-          <Button sx={{ color: theme.palette.primary[100] }}>
+          <Button onClick={()=>navigate(`project/${project._id}`, {state:project._id})} sx={{ color: theme.palette.primary[100] }}>
             View Analytics
             <Launch />
           </Button>

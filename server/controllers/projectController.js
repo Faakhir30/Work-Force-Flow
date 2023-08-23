@@ -31,7 +31,7 @@ const getProjects = asyncHandler(async (req, res) => {
   let projects = [];
   for (const project_id of cur_user.projects) {
     const project = await Project.findById(project_id);
-    if (project) projects=[...projects,project];
+    if (project) projects = [...projects, project];
   }
   if (projects) {
     res.status(200).json(projects); // Send the retrieved projects as the response
@@ -71,4 +71,10 @@ const deleteProject = asyncHandler(async (req, res) => {
   else res.status(500).json({ message: "Error deleting project" });
 });
 
-export { updateProject, createProject, getProjects, deleteProject };
+const getSingleProject = asyncHandler(async (req, res) => {
+  console.log(req.params.id+"asdf\n\nasad")
+  const project = await Project.findById(req.params.id);
+  if (!project) res.status(404).json({ message: "Project not found" });
+  else res.status(200).json({ project: project});
+});
+export { updateProject, createProject, getProjects, deleteProject, getSingleProject };

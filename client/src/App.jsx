@@ -14,6 +14,7 @@ import Users from "./scenes/Users";
 import CreateProject from "./scenes/CreateProject";
 import Tickets from "./scenes/Tickets";
 import CreateTicket from "./scenes/CreateTicket";
+import ProjectAnalytics from "./scenes/ProjectAnalytics";
 
 function App() {
   const mode = useSelector((state) => state.global.mode);
@@ -38,6 +39,7 @@ function App() {
                   <Route path="/tickets" element={<Tickets />} />
                   <Route path="/tickets/create" element={<CreateTicket />} />
                   <Route path="/projects/create" element={<CreateProject />} />
+                  <Route path="projects/project/:pid" element={<ProjectAnalytics />} />
                   <Route path="/users" element={<Users />} />
                 </Route>
               </Route>

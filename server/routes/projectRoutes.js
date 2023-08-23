@@ -4,6 +4,7 @@ import {
   createProject,
   deleteProject,
   getProjects,
+  getSingleProject,
   updateProject,
 } from "../controllers/projectController.js";
 
@@ -11,6 +12,7 @@ const router = express.Router();
 
 router.post("/", protect, createProject);
 
+router.get("/project/:id",getSingleProject)
 router
   .route("/:id")
   .put(isAdminOrDev, updateProject)

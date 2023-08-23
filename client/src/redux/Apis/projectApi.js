@@ -18,14 +18,17 @@ export const projectApi = createApi({
     allProjects: builder.query({
       query: () => ({ url: "/all" }),
     }),
+    singleProject: builder.mutation({
+      query: (pid) => ({ url: "/project/" + pid }),
+    }),
     createProject: builder.mutation({
       query: (body) => ({
         url: "/",
         method: "POST",
-        body
+        body,
       }),
     }),
   }),
 });
 
-export const { useAllProjectsQuery, useCreateProjectMutation } = projectApi;
+export const { useAllProjectsQuery, useCreateProjectMutation, useSingleProjectMutation } = projectApi;
