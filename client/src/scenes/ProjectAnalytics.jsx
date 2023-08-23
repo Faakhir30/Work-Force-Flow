@@ -4,35 +4,44 @@ import Header from "../components/Header";
 import { Box, Container, Typography, useTheme } from "@mui/material";
 import { ResponsiveLine } from "@nivo/line";
 import { useSingleProjectMutation } from "../redux/Apis/projectApi";
+import BreakdownChart from "../components/BreakdownChart";
 
 const ProjectAnalytics = () => {
   const theme = useTheme();
   const location = useLocation();
   const navigate = useNavigate();
   const [project, setProject] = useState("");
+  const [contribs, setContribs] = useState({});
   const [singleProject] = useSingleProjectMutation();
   useEffect(() => {
     const func = async () => {
       const { data, error } = await singleProject(location.state);
       if (error) navigate("/dashboard");
-      setProject(data.project);
+      const contributionMap = {};
+      for (const ticket of data.project.tickets) {
+          if (data.project.team.includes(ticket.holder)) {
+              contributionMap[ticket.holder] =
+              (contributionMap[ticket.holder] || 0) + 1;
+            }
+        }
+        setProject(data.project);
+        setContribs(contributionMap);
     };
     func();
   }, []);
   const data = [];
-  let dates=0
+  let dates = 0;
   if (project) {
     const tickets = project?.tickets?.map((ticket) => ({
       category: ticket.category,
       createdAt: ticket.createdAt.substring(5, 10),
     }));
     const categories = [...new Set(tickets.map((ticket) => ticket.category))];
-    dates = [...new Set(tickets.map((ticket) => ticket.createdAt))]
-      .length;
+    dates = [...new Set(tickets.map((ticket) => ticket.createdAt))].length;
 
     for (const [index, category] of categories.entries()) {
       let points = [];
-      for (const ticket of tickets.filter(
+          for (const ticket of tickets.filter(
         (ticket) => ticket.category === category
       ))
         points.push({ x: ticket.createdAt, y: index + 1 });
@@ -49,11 +58,12 @@ const ProjectAnalytics = () => {
         variant="h3"
         color={theme.palette.secondary[100]}
         fontWeight="bold"
-        sx={{ mb: "5px" }}
+        sx={{ mb: "5px", mt:5 }}
       >
-        Timeline
+        Timeline:
       </Typography>
-      <Box height={"70vh"} width={"50vw"}>
+      {/* Timeline chart */}
+      <Box height={"70vh"} width={"100%"}>
         <ResponsiveLine
           data={data}
           theme={{
@@ -127,6 +137,17 @@ const ProjectAnalytics = () => {
           pointLabelYOffset={-12}
           useMesh={false}
         />
+      </Box>
+      <Box height={"60vh"}>
+      <Typography
+        variant="h3"
+        color={theme.palette.secondary[100]}
+        fontWeight="bold"
+        sx={{ mb: "5px", mt:5 }}
+      >
+        Contributions:
+      </Typography>
+        <BreakdownChart contribs={contribs} />
       </Box>
     </Container>
   );

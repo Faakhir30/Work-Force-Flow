@@ -17,6 +17,7 @@ const Layout = () => {
       ></Sidebar>
       <Box flexGrow={1}>
         <Navbar
+          isNonMobile={isNonMobile}
           isSidebarOpen={isSidebarOpen}
           setIsSidebarOpen={setIsSidebarOpen}
         />

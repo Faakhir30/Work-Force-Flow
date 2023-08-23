@@ -24,7 +24,7 @@ import { useProfieApiQuery } from "../redux/Apis/userApi";
 import profileImage from "../assets/profile.png";
 import cookie from "js-cookie";
 import { useNavigate } from "react-router-dom";
-const Navbar = ({ isSidebarOpen, setIsSidebarOpen }) => {
+const Navbar = ({ isSidebarOpen, setIsSidebarOpen, isNonMobile }) => {
   const user = useProfieApiQuery();
   const dispatch = useDispatch();
   const navigate = useNavigate();
@@ -50,7 +50,7 @@ const Navbar = ({ isSidebarOpen, setIsSidebarOpen }) => {
       <Toolbar sx={{ justifyContent: "space-between" }}>
         {/* LEFT SIDE */}
         <FlexBetween>
-          <IconButton onClick={() => setIsSidebarOpen(!isSidebarOpen)}>
+          <IconButton onClick={() => isNonMobile?"": setIsSidebarOpen(!isSidebarOpen)}>
             <MenuIcon />
           </IconButton>
         </FlexBetween>
