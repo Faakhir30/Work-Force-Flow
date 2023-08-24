@@ -39,7 +39,13 @@ export default function SignInSide() {
       navigate("/dashboard");
     }
   };
-
+  const handleDemo = () => {
+    const demoId = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOiI2NGUyYjk2ZmY5NWU5NDNkOWM5ODUwZjgiLCJpYXQiOjE2OTI1ODAyMDksImV4cCI6MTY5NTE3MjIwOX0.5lj5unCknIDdrrMH02PE6G6EGSSLxHLh7Pso_zLT8PQ"
+    dispatch(setUserId(demoId));
+      Cookies.set("jwt", demoId, { expires: 7 }); // Set the cookie using js-cookie library
+      navigate("/dashboard");
+  }
+  
   return (
     <Grid container component="main" sx={{ height: "100vh" }}>
       <CssBaseline />
@@ -125,7 +131,7 @@ export default function SignInSide() {
             >
               Sign In
             </Button>
-            <Button type="" fullWidth variant="primary" sx={{ mt: 3, mb: 2 }}>
+            <Button onClick={handleDemo} fullWidth variant="primary" sx={{ mt: 3, mb: 2 }}>
               Take A Demo
             </Button>
             <Grid container sx={{ justifyContent: "center" }}>

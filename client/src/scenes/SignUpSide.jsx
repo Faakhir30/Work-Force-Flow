@@ -155,9 +155,6 @@ export default function SignUpSide() {
             >
               Sign Up
             </Button>
-            <Button type="" fullWidth variant="primary" sx={{ mt: 3, mb: 2 }}>
-              Take A Demo
-            </Button>
             <Grid container sx={{ justifyContent: "center" }}>
               <Link href="/login" variant="body2" sx={{ fontSize: "1rem" }}>
                 {"Already have an account? Sign In"}
