@@ -44,31 +44,7 @@ const navItems = [
   {
     text: "Users",
     icon: <People />,
-  },
-  {
-    text: "Stats",
-    icon: null,
-  },
-  {
-    text: "Overview",
-    icon: <PointOfSaleOutlined />,
-  },
-  {
-    text: "Breakdown",
-    icon: <PieChartOutlined />,
-  },
-  // {
-  //   text: "Management",
-  //   icon: null,
-  // },
-  // {
-  //   text: "Admin",
-  //   icon: <AdminPanelSettingsOutlined />,
-  // },
-  // {
-  //   text: "Performance",
-  //   icon: <TrendingUpOutlined />,
-  // },
+  }
 ];
 
 const Sidebar = ({

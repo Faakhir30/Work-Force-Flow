@@ -1,10 +1,8 @@
 import React, { useEffect, useState } from "react";
 import { ResponsivePie } from "@nivo/pie";
 import { Box, Typography, useTheme } from "@mui/material";
-import { useAllusersApiQuery } from "../redux/Apis/userApi";
 
-const BreakdownChart = ({ isDashboard = false, contribs }) => {
-  const { data: userData } = useAllusersApiQuery();
+const BreakdownChart = ({ isDashboard = false, contribs,userData }) => {
   const theme = useTheme();
   const [data, setData] = useState([]);
   useEffect(() => {
@@ -35,8 +33,7 @@ const BreakdownChart = ({ isDashboard = false, contribs }) => {
   return (
     <Box
       height={"60vh"}
-      width={"90%"}
-      minHeight={isDashboard ? "325px" : undefined}
+      width={"81%"}
       position="relative"
     >
       <ResponsivePie

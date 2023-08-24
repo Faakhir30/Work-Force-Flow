@@ -124,6 +124,8 @@ const getUserProfile = asyncHandler(async (req, res) => {
       email: user.email,
       role: user.role,
       company: user.company,
+      projects:user.projects,
+      tickets:user.tickets
     });
   } else {
     res.status(404);

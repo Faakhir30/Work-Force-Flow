@@ -5,11 +5,13 @@ import { Box, Container, Typography, useTheme } from "@mui/material";
 import { ResponsiveLine } from "@nivo/line";
 import { useSingleProjectMutation } from "../redux/Apis/projectApi";
 import BreakdownChart from "../components/BreakdownChart";
+import { useAllusersApiQuery } from "../redux/Apis/userApi";
 
 const ProjectAnalytics = () => {
   const theme = useTheme();
   const location = useLocation();
   const navigate = useNavigate();
+  const { data: userData } = useAllusersApiQuery();
   const [project, setProject] = useState("");
   const [contribs, setContribs] = useState({});
   const [singleProject] = useSingleProjectMutation();
@@ -147,7 +149,7 @@ const ProjectAnalytics = () => {
       >
         Contributions:
       </Typography>
-        <BreakdownChart contribs={contribs} />
+        <BreakdownChart contribs={contribs} userData={userData}/>
       </Box>
     </Container>
   );
