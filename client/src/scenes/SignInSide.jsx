@@ -135,7 +135,7 @@ export default function SignInSide() {
               Take A Demo
             </Button>
             <Grid container sx={{ justifyContent: "center" }}>
-              <Link href="/register" variant="body2" sx={{ fontSize: "1rem" }}>
+              <Link onClick={()=>navigate("/register")} variant="body2" sx={{ fontSize: "1rem" }}>
                 {"Don't have an account? Sign Up"}
               </Link>
             </Grid>
